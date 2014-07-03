@@ -41,12 +41,14 @@ CGFloat buttonSpacerHeight = 0;
 {
     self = [super init];
     if (self) {
+        // 收获，这样的写法更准确一些
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
 
         delegate = self;
         useMotionEffects = false;
         buttonTitles = @[@"Close"];
 
+        // 注册了三个观察者，本地通知类型
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];

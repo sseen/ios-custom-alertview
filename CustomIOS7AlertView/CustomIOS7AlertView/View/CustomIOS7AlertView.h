@@ -41,6 +41,9 @@
 - (void)close;
 
 - (IBAction)customIOS7dialogButtonTouchUpInside:(id)sender;
+
+//这里第一次还是看不懂 block
+//没用typedef就是不清晰
 - (void)setOnButtonTouchUpInside:(void (^)(CustomIOS7AlertView *alertView, int buttonIndex))onButtonTouchUpInside;
 
 - (void)deviceOrientationDidChange: (NSNotification *)notification;
