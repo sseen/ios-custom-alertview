@@ -74,7 +74,7 @@ CGFloat buttonSpacerHeight = 0;
 #endif
 
     dialogView.layer.opacity = 0.5f;
-    dialogView.layer.transform = CATransform3DMakeScale(1.3f, 1.3f, 1.0);
+    dialogView.layer.transform = CATransform3DMakeScale(1.3f, 1.3f, 1.0);  // transform 1-2 这里先放大1.3倍
 
     self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
 
@@ -111,9 +111,9 @@ CGFloat buttonSpacerHeight = 0;
 
     [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
 					 animations:^{
-						 self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4f];
+                         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4f];
                          dialogView.layer.opacity = 1.0f;
-                         dialogView.layer.transform = CATransform3DMakeScale(1, 1, 1);
+                         dialogView.layer.transform = CATransform3DMakeScale(1, 1, 1); // transform 2-2 这里还原为原始大小
 					 }
 					 completion:NULL
      ];
@@ -126,6 +126,8 @@ CGFloat buttonSpacerHeight = 0;
         [delegate customIOS7dialogButtonTouchUpInside:self clickedButtonAtIndex:[sender tag]];
     }
 
+    // block分离写法，还能这样写，就不用当作一个参数传来传去，不过理解起来有点麻烦
+    // 当作一个属性来看待
     if (onButtonTouchUpInside != NULL) {
         onButtonTouchUpInside(self, [sender tag]);
     }
@@ -186,6 +188,7 @@ CGFloat buttonSpacerHeight = 0;
     UIView *dialogContainer = [[UIView alloc] initWithFrame:CGRectMake((screenSize.width - dialogSize.width) / 2, (screenSize.height - dialogSize.height) / 2, dialogSize.width, dialogSize.height)];
 
     // First, we style the dialog to match the iOS7 UIAlertView >>>
+    // 1-2 这里就是灰色的背景
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = dialogContainer.bounds;
     gradient.colors = [NSArray arrayWithObjects:
@@ -193,19 +196,22 @@ CGFloat buttonSpacerHeight = 0;
                        (id)[[UIColor colorWithRed:233.0/255.0 green:233.0/255.0 blue:233.0/255.0 alpha:1.0f] CGColor],
                        (id)[[UIColor colorWithRed:218.0/255.0 green:218.0/255.0 blue:218.0/255.0 alpha:1.0f] CGColor],
                        nil];
-
+//
     CGFloat cornerRadius = kCustomIOS7AlertViewCornerRadius;
     gradient.cornerRadius = cornerRadius;
     [dialogContainer.layer insertSublayer:gradient atIndex:0];
-
+    
+    // 2-2 整体外观的样子
     dialogContainer.layer.cornerRadius = cornerRadius;
     dialogContainer.layer.borderColor = [[UIColor colorWithRed:198.0/255.0 green:198.0/255.0 blue:198.0/255.0 alpha:1.0f] CGColor];
     dialogContainer.layer.borderWidth = 1;
-    dialogContainer.layer.shadowRadius = cornerRadius + 5;
+    dialogContainer.layer.shadowRadius = 0; // shadow 锐度表示，越大越散🈷️模糊
     dialogContainer.layer.shadowOpacity = 0.1f;
     dialogContainer.layer.shadowOffset = CGSizeMake(0 - (cornerRadius+5)/2, 0 - (cornerRadius+5)/2);
     dialogContainer.layer.shadowColor = [UIColor blackColor].CGColor;
+    // shadowpath 表示shadow的形状，提前预知shadow的形状提升性能
     dialogContainer.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:dialogContainer.bounds cornerRadius:dialogContainer.layer.cornerRadius].CGPath;
+    // dialogContainer.layer.shadowPath = [UIBezierPath bezierPathWithOvalInRect:dialogContainer.bounds].CGPath;
 
     // There is a line above the button
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, dialogContainer.bounds.size.height - buttonHeight - buttonSpacerHeight, dialogContainer.bounds.size.width, buttonSpacerHeight)];
@@ -223,6 +229,11 @@ CGFloat buttonSpacerHeight = 0;
 }
 
 // Helper function: add buttons to container
+/**
+ * 添加button，一排等宽
+ *@param
+ *@return
+ */
 - (void)addButtonsToView: (UIView *)container
 {
     if (buttonTitles==NULL) { return; }
@@ -245,6 +256,7 @@ CGFloat buttonSpacerHeight = 0;
         [closeButton.layer setCornerRadius:kCustomIOS7AlertViewCornerRadius];
 
         [container addSubview:closeButton];
+    
     }
 }
 
