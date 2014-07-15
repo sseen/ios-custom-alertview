@@ -111,6 +111,7 @@ CGFloat buttonSpacerHeight = 0;
 
     [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
 					 animations:^{
+                         // 整个的背景色，这里有透明的alpha设置
                          self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4f];
                          dialogView.layer.opacity = 1.0f;
                          dialogView.layer.transform = CATransform3DMakeScale(1, 1, 1); // transform 2-2 这里还原为原始大小
@@ -188,7 +189,7 @@ CGFloat buttonSpacerHeight = 0;
     UIView *dialogContainer = [[UIView alloc] initWithFrame:CGRectMake((screenSize.width - dialogSize.width) / 2, (screenSize.height - dialogSize.height) / 2, dialogSize.width, dialogSize.height)];
 
     // First, we style the dialog to match the iOS7 UIAlertView >>>
-    // 1-2 这里就是灰色的背景
+    // 1-2 这里就是dialog的灰色背景，默认color会是从0到后面index的一个渐变
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = dialogContainer.bounds;
     gradient.colors = [NSArray arrayWithObjects:
@@ -205,7 +206,7 @@ CGFloat buttonSpacerHeight = 0;
     dialogContainer.layer.cornerRadius = cornerRadius;
     dialogContainer.layer.borderColor = [[UIColor colorWithRed:198.0/255.0 green:198.0/255.0 blue:198.0/255.0 alpha:1.0f] CGColor];
     dialogContainer.layer.borderWidth = 1;
-    dialogContainer.layer.shadowRadius = 0; // shadow 锐度表示，越大越散🈷️模糊
+    dialogContainer.layer.shadowRadius = 0; // shadow 锐度表示，越大越散🈷️模糊, 0的话opacity
     dialogContainer.layer.shadowOpacity = 0.1f;
     dialogContainer.layer.shadowOffset = CGSizeMake(0 - (cornerRadius+5)/2, 0 - (cornerRadius+5)/2);
     dialogContainer.layer.shadowColor = [UIColor blackColor].CGColor;
